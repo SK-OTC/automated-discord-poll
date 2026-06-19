@@ -1,0 +1,23 @@
+name: Delete Daily Poll
+
+on:
+  schedule:
+    - cron: "0 2 * * *"   # 02:00 UTC = 4h after the 22:00 UTC poll close
+  workflow_dispatch:
+
+jobs:
+  delete-poll:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - run: pip install requests python-dotenv
+
+      - run: python delete_messages.py
+        env:
+          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+          DISCORD_CHANNEL_ID: ${{ secrets.DISCORD_CHANNEL_ID }}
