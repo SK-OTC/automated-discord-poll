@@ -8,13 +8,21 @@ on:
 jobs:
   send-poll:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write       # needed by the keepalive step to push
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
+
       - run: pip install requests python-dotenv
+
       - run: python send_poll.py
         env:
           DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
           DISCORD_CHANNEL_ID: ${{ secrets.DISCORD_CHANNEL_ID }}
+
+      - name: Keep workflow alive
+        uses: gautamkrishnar/keepalive-workflow@v2
