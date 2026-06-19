@@ -3,13 +3,11 @@ name: Daily Discord Poll
 on:
   schedule:
     - cron: "0 14 * * *"   # 14:00 UTC = 08:00 at UTC-6
-  workflow_dispatch:        # manual "Run workflow" button for testing
+  workflow_dispatch:
 
 jobs:
   send-poll:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write       # needed by the keepalive step to push
     steps:
       - uses: actions/checkout@v5
 
@@ -23,6 +21,3 @@ jobs:
         env:
           DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
           DISCORD_CHANNEL_ID: ${{ secrets.DISCORD_CHANNEL_ID }}
-
-      - name: Keep workflow alive
-        uses: gautamkrishnar/keepalive-workflow@v2
